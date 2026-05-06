@@ -6,6 +6,7 @@ import WorkSection from "@/components/portfolio/WorkSection";
 import AboutSection from "@/components/portfolio/AboutSection";
 import ExperienceSection from "@/components/portfolio/ExperienceSection";
 import ContactSection from "@/components/portfolio/ContactSection";
+import ScrollToTop from "@/components/portfolio/ScrollToTop";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -41,6 +42,7 @@ function Index() {
         <ExperienceSection />
         <ContactSection />
       </main>
+      <ScrollToTop />
     </div>
   );
 }
