@@ -15,7 +15,16 @@ import {
 } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
 
-const projects = [
+type Project = {
+  title: string;
+  date: string;
+  tech: string[];
+  description: string;
+  link: string;
+  youtubeId?: string;
+};
+
+const projects: Project[] = [
   {
     title: "Stop Motion Animation Project",
     date: "April 2025",
@@ -23,6 +32,7 @@ const projects = [
     description:
       "A creative stop-motion animation project focused on storytelling through frame-by-frame photography, scene composition, object movement, and visual timing techniques to create smooth cinematic motion effects.",
     link: "https://www.youtube.com/watch?v=V7-SEvJ7w3o",
+    youtubeId: "V7-SEvJ7w3o",
   },
   {
     title: "Creative Design Showreel",
@@ -31,6 +41,7 @@ const projects = [
     description:
       "A curated showcase of creative projects featuring UI/UX design, 3D modeling, motion graphics, typography, game design concepts, and visual storytelling developed throughout my B.Tech journey in Gaming and Graphics.",
     link: "https://www.youtube.com/watch?v=fKHMHmBjvU4",
+    youtubeId: "fKHMHmBjvU4",
   },
   {
     title: "Vendor+",
@@ -61,9 +72,14 @@ const projects = [
 const WorkSection = () => {
   const [showMyWork, setShowMyWork] = useState(false);
   const [showFigma, setShowFigma] = useState(false);
-  const openProject = (url: string) => {
-    if (typeof window === "undefined") return;
-    window.open(url, "_blank", "noopener,noreferrer");
+  const [activeVideo, setActiveVideo] = useState<Project | null>(null);
+
+  const handleProjectClick = (project: Project) => {
+    if (project.youtubeId) {
+      setActiveVideo(project);
+    } else if (typeof window !== "undefined") {
+      window.open(project.link, "_blank", "noopener,noreferrer");
+    }
   };
 
   return (
@@ -92,8 +108,8 @@ const WorkSection = () => {
               <CarouselItem key={project.title} className="md:basis-1/2">
                 <button
                   type="button"
-                  onClick={() => openProject(project.link)}
-                  className="group relative rounded-xl border border-border bg-card/50 p-8 transition-all duration-500 hover:border-primary/40 hover:bg-card block cursor-pointer h-full"
+                  onClick={() => handleProjectClick(project)}
+                  className="group relative w-full text-left rounded-xl border border-border bg-card/50 p-8 transition-all duration-500 hover:border-primary/40 hover:bg-card block cursor-pointer h-full"
                 >
                   <div className="flex items-start justify-between mb-4">
                     <div>
@@ -128,6 +144,40 @@ const WorkSection = () => {
           <CarouselNext className="hidden md:flex" />
         </Carousel>
       </div>
+
+      <Dialog
+        open={!!activeVideo}
+        onOpenChange={(open) => {
+          if (!open) setActiveVideo(null);
+        }}
+      >
+        <DialogContent className="sm:max-w-3xl p-0 overflow-hidden bg-black border-border">
+          <DialogHeader className="px-6 pt-5 pb-3">
+            <DialogTitle className="text-foreground">{activeVideo?.title}</DialogTitle>
+          </DialogHeader>
+          {activeVideo?.youtubeId && (
+            <div className="relative w-full aspect-video">
+              <iframe
+                src={`https://www.youtube-nocookie.com/embed/${activeVideo.youtubeId}?autoplay=1&rel=0`}
+                title={activeVideo.title}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="absolute inset-0 w-full h-full border-0"
+              />
+            </div>
+          )}
+          <div className="px-6 py-3 text-center">
+            <a
+              href={activeVideo?.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs uppercase tracking-widest text-primary hover:underline"
+            >
+              Open on YouTube ↗
+            </a>
+          </div>
+        </DialogContent>
+      </Dialog>
 
       <Dialog
         open={showMyWork && !showFigma}
