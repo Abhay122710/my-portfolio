@@ -2,21 +2,66 @@ import { useEffect, useState } from "react";
 import { Github, Linkedin } from "lucide-react";
 
 const navItems = [
-  { label: "Services", href: "#services" },
-  { label: "Work", href: "#work" },
-  { label: "About", href: "#about" },
-  { label: "Experience", href: "#experience" },
-  { label: "Contact", href: "#contact" },
+  { label: "Services", id: "services" },
+  { label: "Work", id: "work" },
+  { label: "About", id: "about" },
+  { label: "Experience", id: "experience" },
+  { label: "Contact", id: "contact" },
 ];
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
+  const [active, setActive] = useState<string>("");
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener("scroll", onScroll);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  useEffect(() => {
+    const sections = navItems
+      .map((i) => document.getElementById(i.id))
+      .filter((el): el is HTMLElement => !!el);
+
+    if (sections.length === 0) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        // Pick the entry most in view among intersecting ones
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+        if (visible[0]) setActive(visible[0].target.id);
+      },
+      {
+        // Trigger when section crosses the middle band of viewport
+        rootMargin: "-40% 0px -55% 0px",
+        threshold: [0, 0.25, 0.5, 0.75, 1],
+      },
+    );
+
+    sections.forEach((s) => observer.observe(s));
+    return () => observer.disconnect();
+  }, []);
+
+  const handleNav = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    e.preventDefault();
+    const top = el.getBoundingClientRect().top + window.scrollY - 64;
+    window.scrollTo({ top, behavior: "smooth" });
+    history.replaceState(null, "", `#${id}`);
+    setActive(id);
+  };
+
+  const handleHome = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    history.replaceState(null, "", " ");
+    setActive("");
+  };
 
   return (
     <nav
@@ -27,6 +72,7 @@ const Navbar = () => {
       <div className="container-x flex items-center justify-between h-16 md:h-20">
         <a
           href="#"
+          onClick={handleHome}
           className="flex-shrink-0 w-10 h-10 rounded-full border-2 border-primary flex items-center justify-center bg-primary/10 text-primary font-bold text-sm tracking-wide"
           aria-label="Home"
         >
@@ -34,11 +80,20 @@ const Navbar = () => {
         </a>
 
         <div className="hidden lg:flex items-center gap-6">
-          {navItems.map((item) => (
-            <a key={item.label} href={item.href} className="nav-link">
-              {item.label}
-            </a>
-          ))}
+          {navItems.map((item) => {
+            const isActive = active === item.id;
+            return (
+              <a
+                key={item.label}
+                href={`#${item.id}`}
+                onClick={(e) => handleNav(e, item.id)}
+                aria-current={isActive ? "true" : undefined}
+                className={`nav-link ${isActive ? "nav-link-active" : ""}`}
+              >
+                {item.label}
+              </a>
+            );
+          })}
         </div>
 
         <div className="flex items-center gap-2 md:gap-3">
