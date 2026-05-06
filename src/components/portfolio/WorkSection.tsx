@@ -22,7 +22,7 @@ const projects = [
     tech: ["Figma", "Blender", "UI/UX", "Typography", "3D Design", "Motion Graphics", "Game Design"],
     description:
       "A curated showcase of creative projects featuring UI/UX design, 3D modeling, motion graphics, typography, game design concepts, and visual storytelling developed throughout my B.Tech journey in Gaming and Graphics.",
-    link: "https://youtu.be/fKHMHmBjvU4?si=7z5cgHgfx4DHRjTM",
+    link: "https://www.youtube.com/watch?v=fKHMHmBjvU4",
   },
   {
     title: "Vendor+",
