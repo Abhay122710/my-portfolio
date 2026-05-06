@@ -49,7 +49,7 @@ const HeroSection = () => {
       >
         <img
           src={heroImage}
-          alt="Abhay Chaudhary — UI/UX Developer"
+          alt="Abhay Chaudhary — Software Developer"
           className="w-full h-full object-cover object-[center_20%]"
         />
       </div>
@@ -79,7 +79,7 @@ const HeroSection = () => {
           }`}
           style={!entered ? { animationDelay: "0.9s" } : undefined}
         >
-          UI/UX Developer
+          Software Developer
         </p>
       </div>
 
