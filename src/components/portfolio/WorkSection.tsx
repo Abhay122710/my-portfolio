@@ -23,6 +23,8 @@ const projects = [
     description:
       "AI-powered hyperlocal commerce platform helping local shops manage orders, analyze product demand, and connect with nearby customers using smart analytics, masked calling, and automated order confirmation systems.",
     link: "https://vendorplus.online/",
+    bg: "bg-emerald-500",
+    text: "text-emerald-950",
   },
   {
     title: "Lost & Found Management System",
@@ -31,6 +33,8 @@ const projects = [
     description:
       "Web-based application enabling students to report, search, and claim lost or found items with secure authentication, image uploads, and REST API integration.",
     link: "https://good-work-team.lovable.app",
+    bg: "bg-rose-500",
+    text: "text-rose-950",
   },
   {
     title: "Geometry Dash–Style 2D Game",
@@ -39,6 +43,8 @@ const projects = [
     description:
       "2D rhythm-based platformer with multiple player modes (cube, ball, ship, wave, spider), physics-based movement, gravity switching, and collision detection.",
     link: "https://abhay122710.itch.io/geometry-dash-game",
+    bg: "bg-indigo-500",
+    text: "text-indigo-50",
   },
 ];
 
