@@ -23,8 +23,6 @@ const projects = [
     description:
       "AI-powered hyperlocal commerce platform helping local shops manage orders, analyze product demand, and connect with nearby customers using smart analytics, masked calling, and automated order confirmation systems.",
     link: "https://vendorplus.online/",
-    bg: "bg-emerald-500",
-    text: "text-emerald-950",
   },
   {
     title: "Lost & Found Management System",
@@ -33,8 +31,6 @@ const projects = [
     description:
       "Web-based application enabling students to report, search, and claim lost or found items with secure authentication, image uploads, and REST API integration.",
     link: "https://good-work-team.lovable.app",
-    bg: "bg-rose-500",
-    text: "text-rose-950",
   },
   {
     title: "Geometry Dash–Style 2D Game",
@@ -43,8 +39,6 @@ const projects = [
     description:
       "2D rhythm-based platformer with multiple player modes (cube, ball, ship, wave, spider), physics-based movement, gravity switching, and collision detection.",
     link: "https://abhay122710.itch.io/geometry-dash-game",
-    bg: "bg-indigo-500",
-    text: "text-indigo-50",
   },
 ];
 
@@ -53,84 +47,66 @@ const WorkSection = () => {
   const [showFigma, setShowFigma] = useState(false);
 
   return (
-    <section id="work" className="py-24 md:py-32 relative scroll-mt-20 overflow-hidden">
+    <section id="work" className="py-24 md:py-32 relative scroll-mt-20">
       <div className="container-x">
-        <div className="mb-10 flex flex-col gap-6">
-          <p className="text-xs tracking-[0.4em] uppercase text-muted-foreground">
-            Things I can help you with…
-          </p>
-          <p className="text-sm md:text-base font-semibold tracking-wider uppercase text-foreground">
-            Web &amp; Mobile <span className="text-muted-foreground">/</span> Software{" "}
-            <span className="text-muted-foreground">/</span> Game Dev{" "}
-            <span className="text-muted-foreground">/</span> UI &amp; UX
-          </p>
-        </div>
+        <div className="mb-16 text-center">
+          <p className="text-xs tracking-[0.4em] uppercase text-primary mb-3">Portfolio</p>
+          <h2 className="text-4xl md:text-5xl font-bold text-foreground">Work</h2>
 
-        <div className="relative flex items-end justify-between mb-10 border-t border-border pt-10">
-          <div>
-            <p className="text-xs tracking-[0.4em] uppercase text-muted-foreground">
-              Feat Works <span className="text-foreground/60">(0{projects.length})</span>
-            </p>
-            <button
-              onClick={() => setShowMyWork(true)}
-              className="mt-4 inline-flex items-center gap-2 px-5 py-2 text-[10px] font-semibold tracking-widest uppercase rounded-full border border-border text-foreground transition-all duration-300 hover:border-primary hover:text-primary"
-            >
-              <Palette size={12} />
-              My Work
-            </button>
-          </div>
-          <h2 className="text-[18vw] md:text-[10vw] font-black tracking-tight leading-[0.85] text-foreground select-none">
-            Work
-          </h2>
+          <button
+            onClick={() => setShowMyWork(true)}
+            className="mt-6 inline-flex items-center gap-2 px-6 py-2.5 text-xs font-semibold tracking-widest uppercase rounded-full border border-primary/50 text-primary transition-all duration-300 hover:border-primary hover:bg-primary/10"
+          >
+            <Palette size={14} />
+            My Work
+          </button>
         </div>
 
         <Carousel
           opts={{ align: "start", loop: true }}
-          plugins={[Autoplay({ delay: 4500, stopOnInteraction: true })]}
+          plugins={[Autoplay({ delay: 4000, stopOnInteraction: true })]}
+          className="max-w-4xl mx-auto"
         >
-          <CarouselContent className="-ml-4">
+          <CarouselContent>
             {projects.map((project) => (
-              <CarouselItem key={project.title} className="pl-4 md:basis-1/2 lg:basis-1/2">
+              <CarouselItem key={project.title} className="md:basis-1/2">
                 <a
                   href={project.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`group relative block rounded-3xl ${project.bg} ${project.text} p-7 md:p-9 h-[420px] overflow-hidden transition-transform duration-500 hover:-translate-y-1 shadow-xl`}
+                  className="group relative rounded-xl border border-border bg-card/50 p-8 transition-all duration-500 hover:border-primary/40 hover:bg-card block cursor-pointer h-full"
                 >
-                  <div className="flex items-start justify-between">
-                    <p className="text-[10px] tracking-[0.3em] uppercase opacity-70">
-                      {project.date}
-                    </p>
+                  <div className="flex items-start justify-between mb-4">
+                    <div>
+                      <h3 className="text-xl font-semibold text-foreground mb-1">{project.title}</h3>
+                      <p className="text-xs text-muted-foreground tracking-wider uppercase">
+                        {project.date}
+                      </p>
+                    </div>
+                    <ExternalLink
+                      size={16}
+                      className="text-muted-foreground group-hover:text-primary transition-colors"
+                    />
                   </div>
-
-                  <p className="mt-6 text-sm leading-relaxed opacity-90 line-clamp-5 max-w-md">
+                  <p className="text-sm text-muted-foreground leading-relaxed mb-5">
                     {project.description}
                   </p>
-
-                  <div className="absolute left-7 right-7 bottom-7 flex items-end justify-between gap-4">
-                    <div className="flex flex-wrap gap-1.5 max-w-[70%]">
-                      {project.tech.slice(0, 4).map((t) => (
-                        <span
-                          key={t}
-                          className="text-[10px] px-2.5 py-1 rounded-full bg-black/15 backdrop-blur font-semibold"
-                        >
-                          {t}
-                        </span>
-                      ))}
-                    </div>
-                    <span className="inline-flex items-center gap-2 pl-4 pr-1 py-1 rounded-full bg-white text-black text-xs font-semibold whitespace-nowrap">
-                      {project.title}
-                      <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-black text-white">
-                        <ExternalLink size={12} />
+                  <div className="flex flex-wrap gap-2">
+                    {project.tech.map((t) => (
+                      <span
+                        key={t}
+                        className="text-xs px-3 py-1 rounded-full bg-primary/10 text-primary font-medium"
+                      >
+                        {t}
                       </span>
-                    </span>
+                    ))}
                   </div>
                 </a>
               </CarouselItem>
             ))}
           </CarouselContent>
-          <CarouselPrevious className="hidden md:flex -left-4" />
-          <CarouselNext className="hidden md:flex -right-4" />
+          <CarouselPrevious className="hidden md:flex" />
+          <CarouselNext className="hidden md:flex" />
         </Carousel>
       </div>
 
