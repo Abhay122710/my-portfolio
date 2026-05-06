@@ -22,7 +22,7 @@ const projects = [
     tech: ["Stop Motion", "Video Editing", "Frame Animation", "Storyboarding", "Creative Direction", "Visual Storytelling"],
     description:
       "A creative stop-motion animation project focused on storytelling through frame-by-frame photography, scene composition, object movement, and visual timing techniques to create smooth cinematic motion effects.",
-    link: "https://youtu.be/V7-SEvJ7w3o",
+    link: "https://www.youtube.com/watch?v=V7-SEvJ7w3o",
   },
   {
     title: "Creative Design Showreel",
