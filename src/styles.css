@@ -195,4 +195,11 @@
     transform: scaleX(1);
     transform-origin: left;
   }
+  .nav-link-active {
+    color: var(--color-foreground);
+  }
+  .nav-link-active::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
 }
