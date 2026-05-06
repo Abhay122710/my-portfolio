@@ -1,101 +1,56 @@
-import { useEffect, useRef, useState } from "react";
-import { Mouse } from "lucide-react";
-import heroImage from "@/assets/hero-portrait.jpg";
+import { ArrowDown } from "lucide-react";
 
 const HeroSection = () => {
-  const [parallaxY, setParallaxY] = useState(0);
-  const [scrollProgress, setScrollProgress] = useState(0);
-  const [entered, setEntered] = useState(false);
-  const sectionRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setEntered(true), 2000);
-    return () => clearTimeout(timer);
-  }, []);
-
-  useEffect(() => {
-    const onScroll = () => {
-      const y = window.scrollY;
-      setParallaxY(y * 0.3);
-      const progress = Math.min(1, Math.max(0, y / window.innerHeight));
-      setScrollProgress(progress);
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  const heroOpacity = Math.max(0, 1 - scrollProgress * 1.5);
-  const heroScale = 1.1 + scrollProgress * 0.15;
-  const textOpacity = Math.max(0, 1 - scrollProgress * 2.5);
-  const textTranslateY = scrollProgress * -60;
-  const blur = scrollProgress * 8;
-
   return (
-    <div ref={sectionRef} className="relative h-screen w-full overflow-hidden">
-      <div className="absolute -left-1/4 top-1/4 w-[600px] h-[600px] glow-spot-blue rounded-full animate-float opacity-60 pointer-events-none" />
+    <section className="relative min-h-screen w-full overflow-hidden flex items-center pt-24 pb-16">
+      <div className="absolute -left-1/4 top-1/4 w-[600px] h-[600px] glow-spot-blue rounded-full animate-float opacity-40 pointer-events-none" />
       <div
-        className="absolute -right-1/4 top-1/3 w-[500px] h-[500px] glow-spot-orange rounded-full animate-float opacity-50 pointer-events-none"
+        className="absolute -right-1/4 top-1/3 w-[500px] h-[500px] glow-spot-orange rounded-full animate-float opacity-30 pointer-events-none"
         style={{ animationDelay: "3s" }}
       />
 
-      <div
-        className={`absolute inset-0 ${!entered ? "animate-hero-zoom" : ""}`}
-        style={{
-          transform: entered ? `scale(${heroScale}) translateY(${parallaxY}px)` : undefined,
-          opacity: entered ? heroOpacity : undefined,
-          filter: entered ? `blur(${blur}px)` : undefined,
-          willChange: "transform, opacity, filter",
-        }}
-      >
-        <img
-          src={heroImage}
-          alt="Abhay Chaudhary — Software Developer"
-          className="w-full h-full object-cover object-[center_20%]"
-        />
-      </div>
-
-      <div className="absolute inset-0 cinematic-gradient pointer-events-none" />
-      <div className="absolute inset-0 hero-overlay pointer-events-none" />
-
-      <div
-        className="absolute inset-0 flex flex-col items-center justify-center z-10 px-4"
-        style={
-          entered
-            ? { opacity: textOpacity, transform: `translateY(${textTranslateY}px)` }
-            : undefined
-        }
-      >
-        <h1
-          className={`text-5xl sm:text-7xl md:text-9xl font-black tracking-tight text-foreground text-glow text-center ${
-            !entered ? "opacity-0 animate-fade-up" : ""
-          }`}
-          style={!entered ? { animationDelay: "0.5s" } : undefined}
-        >
-          Abhay Chaudhary
-        </h1>
-        <p
-          className={`mt-4 text-sm sm:text-base md:text-lg tracking-[0.4em] uppercase text-muted-foreground font-medium text-center ${
-            !entered ? "opacity-0 animate-fade-up" : ""
-          }`}
-          style={!entered ? { animationDelay: "0.9s" } : undefined}
-        >
-          Software Developer
+      <div className="container-x relative z-10 w-full">
+        <p className="text-center text-xs md:text-sm tracking-[0.25em] text-muted-foreground mb-8 md:mb-10">
+          <span className="text-primary">✦</span> Namaste! I am{" "}
+          <span className="text-foreground font-semibold">Abhay Chaudhary</span> aka{" "}
+          <span className="text-foreground font-semibold">AC</span>
         </p>
-      </div>
 
-      <div
-        className={`absolute bottom-10 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2 transition-opacity duration-300 ${
-          !entered ? "opacity-0 animate-fade-in" : ""
-        }`}
-        style={{
-          ...(!entered ? { animationDelay: "1.6s" } : {}),
-          opacity: entered ? (scrollProgress > 0.05 ? 0 : 1) : undefined,
-        }}
-      >
-        <Mouse size={20} className="text-muted-foreground animate-scroll-bounce" />
-        <span className="text-xs tracking-[0.3em] uppercase text-muted-foreground">Scroll</span>
+        <div className="relative max-w-6xl mx-auto">
+          <h1 className="text-[18vw] md:text-[12vw] lg:text-[11rem] font-black leading-[0.85] tracking-tight text-foreground text-center">
+            Creative
+          </h1>
+
+          <span className="absolute right-[6%] top-[18%] hidden sm:inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500 text-emerald-950 text-[10px] md:text-xs font-semibold tracking-wider rotate-[-4deg] shadow-lg">
+            Game Designer
+          </span>
+
+          <div className="relative mt-2 md:mt-4">
+            <h1 className="text-[18vw] md:text-[12vw] lg:text-[11rem] font-black leading-[0.85] tracking-tight text-muted-foreground/60 text-center">
+              <span className="italic font-light text-foreground/40 mr-3">Software</span>
+              Developer
+            </h1>
+
+            <span className="absolute left-[4%] top-[10%] hidden sm:inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-rose-500 text-rose-950 text-[10px] md:text-xs font-semibold tracking-wider rotate-[-6deg] shadow-lg">
+              Full-Stack
+            </span>
+            <span className="absolute right-[8%] bottom-[12%] hidden sm:inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-500 text-indigo-50 text-[10px] md:text-xs font-semibold tracking-wider rotate-[5deg] shadow-lg">
+              UI / UX
+            </span>
+          </div>
+        </div>
+
+        <div className="mt-12 md:mt-16 flex justify-center">
+          <a
+            href="#work"
+            className="inline-flex items-center justify-center w-12 h-12 rounded-full border border-border text-muted-foreground hover:border-primary hover:text-primary transition-colors"
+            aria-label="Scroll to work"
+          >
+            <ArrowDown size={18} />
+          </a>
+        </div>
       </div>
-    </div>
+    </section>
   );
 };
 
