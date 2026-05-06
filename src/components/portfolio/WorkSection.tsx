@@ -14,7 +14,7 @@ const projects = [
     tech: ["React", "TypeScript", "Vite", "Supabase", "Twilio", "Machine Learning", "REST API", "Tailwind CSS"],
     description:
       "AI-powered hyperlocal commerce platform helping local shops manage orders, analyze product demand, and connect with nearby customers using smart analytics, masked calling, and automated order confirmation systems.",
-    link: "#",
+    link: "https://vendorplus.online/",
   },
   {
     title: "Lost & Found Management System",
