@@ -99,7 +99,8 @@ const Navbar = () => {
         <div className="flex items-center gap-2 md:gap-3">
           <a
             href="/Abhay_Chaudhary_Resume.pdf"
-            download="Abhay_Chaudhary_Resume.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
             className="hidden sm:inline-flex items-center px-3 md:px-4 py-1.5 text-[10px] md:text-xs font-semibold tracking-widest uppercase rounded-full border border-muted-foreground/30 text-foreground transition-all duration-300 hover:border-primary hover:text-primary"
           >
             Resume
