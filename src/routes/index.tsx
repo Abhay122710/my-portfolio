@@ -11,13 +11,13 @@ import ScrollToTop from "@/components/portfolio/ScrollToTop";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Abhay Chaudhary — UI/UX Developer & Game Designer" },
+      { title: "Abhay Chaudhary — Software Developer & Game Designer" },
       {
         name: "description",
         content:
-          "Portfolio of Abhay Chaudhary — UI/UX developer, Unity game designer, and CSE undergrad at UPES Dehradun. Selected work, services, experience, and contact.",
+          "Portfolio of Abhay Chaudhary — software developer, Unity game designer, and CSE undergrad at UPES Dehradun. Selected work, services, experience, and contact.",
       },
-      { property: "og:title", content: "Abhay Chaudhary — UI/UX Developer & Game Designer" },
+      { property: "og:title", content: "Abhay Chaudhary — Software Developer & Game Designer" },
       {
         property: "og:description",
         content:

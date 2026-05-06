@@ -3,8 +3,10 @@ import { ArrowUp } from "lucide-react";
 
 const ScrollToTop = () => {
   const [visible, setVisible] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     const onScroll = () => setVisible(window.scrollY > window.innerHeight * 0.6);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -15,6 +17,8 @@ const ScrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
     history.replaceState(null, "", " ");
   };
+
+  if (!mounted) return null;
 
   return (
     <button
