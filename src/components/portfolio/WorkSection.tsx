@@ -61,6 +61,10 @@ const projects = [
 const WorkSection = () => {
   const [showMyWork, setShowMyWork] = useState(false);
   const [showFigma, setShowFigma] = useState(false);
+  const openProject = (url: string) => {
+    if (typeof window === "undefined") return;
+    window.open(url, "_blank", "noopener,noreferrer");
+  };
 
   return (
     <section id="work" className="py-24 md:py-32 relative scroll-mt-20">
@@ -86,10 +90,9 @@ const WorkSection = () => {
           <CarouselContent>
             {projects.map((project) => (
               <CarouselItem key={project.title} className="md:basis-1/2">
-                <a
-                  href={project.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <button
+                  type="button"
+                  onClick={() => openProject(project.link)}
                   className="group relative rounded-xl border border-border bg-card/50 p-8 transition-all duration-500 hover:border-primary/40 hover:bg-card block cursor-pointer h-full"
                 >
                   <div className="flex items-start justify-between mb-4">
@@ -117,7 +120,7 @@ const WorkSection = () => {
                       </span>
                     ))}
                   </div>
-                </a>
+                </button>
               </CarouselItem>
             ))}
           </CarouselContent>
