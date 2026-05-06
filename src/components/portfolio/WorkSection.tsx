@@ -30,7 +30,7 @@ const projects = [
     tech: ["Unity 3D", "C#", "NavMesh", "Raycasting"],
     description:
       "2D rhythm-based platformer with multiple player modes (cube, ball, ship, wave, spider), physics-based movement, gravity switching, and collision detection.",
-    link: "https://github.com/Abhay122710/Geometry-Dash-Style-2D-Game",
+    link: "https://abhay122710.itch.io/geometry-dash-game",
   },
 ];
 
