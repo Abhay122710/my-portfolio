@@ -40,13 +40,15 @@ const HeroSection = () => {
           </div>
         </div>
 
-        <a
-          href="#work"
-          className="mt-12 md:mt-16 inline-flex items-center justify-center w-12 h-12 rounded-full border border-border text-muted-foreground hover:border-primary hover:text-primary transition-colors mx-auto"
-          aria-label="Scroll to work"
-        >
-          <ArrowDown size={18} />
-        </a>
+        <div className="mt-12 md:mt-16 flex justify-center">
+          <a
+            href="#work"
+            className="inline-flex items-center justify-center w-12 h-12 rounded-full border border-border text-muted-foreground hover:border-primary hover:text-primary transition-colors"
+            aria-label="Scroll to work"
+          >
+            <ArrowDown size={18} />
+          </a>
+        </div>
       </div>
     </section>
   );
