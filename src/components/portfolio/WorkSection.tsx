@@ -22,7 +22,7 @@ const projects = [
     tech: ["Java", "Spring Boot", "HTML/CSS", "JavaScript", "SQL"],
     description:
       "Web-based application enabling students to report, search, and claim lost or found items with secure authentication, image uploads, and REST API integration.",
-    link: "https://github.com/Abhay122710/lost-found-UPES",
+    link: "https://good-work-team.lovable.app",
   },
   {
     title: "Geometry Dash–Style 2D Game",
