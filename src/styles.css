@@ -105,7 +105,56 @@
   --hero-orange: oklch(0.72 0.18 50);
   --hero-bg: oklch(0.16 0.03 260);
 
+  /* Material / depth tokens */
+  --shadow-elevated:
+    0 1px 0 0 color-mix(in oklab, white 8%, transparent) inset,
+    0 12px 30px -12px color-mix(in oklab, black 70%, transparent),
+    0 30px 60px -30px color-mix(in oklab, var(--hero-blue) 30%, transparent);
+  --shadow-inset:
+    inset 0 1px 0 0 color-mix(in oklab, white 6%, transparent),
+    inset 0 -1px 0 0 color-mix(in oklab, black 40%, transparent);
+  --shadow-glow-blue: 0 0 40px -8px color-mix(in oklab, var(--hero-blue) 50%, transparent);
+  --shadow-glow-orange: 0 0 40px -8px color-mix(in oklab, var(--hero-orange) 50%, transparent);
+  --gradient-card: linear-gradient(
+    160deg,
+    color-mix(in oklab, white 5%, transparent) 0%,
+    color-mix(in oklab, var(--hero-bg) 70%, transparent) 60%,
+    color-mix(in oklab, var(--hero-blue) 8%, transparent) 100%
+  );
+  --gradient-border: linear-gradient(
+    135deg,
+    color-mix(in oklab, var(--hero-blue) 60%, transparent),
+    color-mix(in oklab, white 12%, transparent) 50%,
+    color-mix(in oklab, var(--hero-orange) 50%, transparent)
+  );
+  --gradient-timeline: linear-gradient(
+    to bottom,
+    transparent 0%,
+    color-mix(in oklab, var(--hero-blue) 70%, transparent) 15%,
+    color-mix(in oklab, var(--hero-orange) 60%, transparent) 85%,
+    transparent 100%
+  );
+
   color-scheme: dark;
+}
+
+@theme inline {
+  @keyframes tilt-float {
+    0%, 100% { transform: translateY(0) rotateX(0) rotateY(0); }
+    50% { transform: translateY(-6px) rotateX(2deg) rotateY(-2deg); }
+  }
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+  @keyframes pulse-glow {
+    0%, 100% { opacity: 0.5; transform: scale(1); }
+    50% { opacity: 0.8; transform: scale(1.05); }
+  }
+  @keyframes light-drift {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(40px, -30px); }
+  }
 }
 
 @layer base {
