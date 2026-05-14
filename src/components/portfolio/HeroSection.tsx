@@ -58,7 +58,7 @@ const HeroSection = () => {
         }}
       >
         <Suspense fallback={null}>
-          <Hero3DModel mouseX={mouse.x} mouseY={mouse.y} />
+          <Hero3DModel mouseX={mouse.x} mouseY={mouse.y} typing={scrollProgress < 0.05} />
         </Suspense>
       </div>
 
