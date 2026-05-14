@@ -63,6 +63,30 @@ const Navbar = () => {
     setActive("");
   };
 
+  const handleResumeOpen = async (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch("/Abhay_Chaudhary_Resume.pdf");
+      if (!response.ok) throw new Error("Failed to load resume");
+
+      const pdfBlob = await response.blob();
+      const blobUrl = URL.createObjectURL(pdfBlob);
+      const newTab = window.open(blobUrl, "_blank", "noopener,noreferrer");
+
+      if (!newTab) {
+        window.location.href = blobUrl;
+        return;
+      }
+
+      newTab.addEventListener?.("load", () => {
+        setTimeout(() => URL.revokeObjectURL(blobUrl), 60_000);
+      });
+    } catch {
+      window.open("/Abhay_Chaudhary_Resume.pdf", "_blank", "noopener,noreferrer");
+    }
+  };
+
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
@@ -98,7 +122,8 @@ const Navbar = () => {
 
         <div className="flex items-center gap-2 md:gap-3">
           <a
-            href="https://abhaychaudharyportfolio.lovable.app/Abhay_Chaudhary_Resume.pdf"
+            href="/Abhay_Chaudhary_Resume.pdf"
+            onClick={handleResumeOpen}
             target="_blank"
             rel="noopener noreferrer"
             className="hidden sm:inline-flex items-center px-3 md:px-4 py-1.5 text-[10px] md:text-xs font-semibold tracking-widest uppercase rounded-full border border-muted-foreground/30 text-foreground transition-all duration-300 hover:border-primary hover:text-primary"
