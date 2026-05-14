@@ -1,6 +1,11 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Mouse } from "lucide-react";
 import heroImage from "@/assets/hero-portrait.jpg";
+import heroFarLeft from "@/assets/hero-portrait-far-left.jpg";
+import heroLeft from "@/assets/hero-portrait-left.jpg";
+import heroRight from "@/assets/hero-portrait-right.jpg";
+import heroFarRight from "@/assets/hero-portrait-far-right.jpg";
+import heroFg from "@/assets/hero-portrait-fg.png";
 
 const HeroSection = () => {
   const [parallaxY, setParallaxY] = useState(0);
@@ -8,6 +13,11 @@ const HeroSection = () => {
   const [entered, setEntered] = useState(false);
   const [mouse, setMouse] = useState({ x: 0, y: 0 });
   const sectionRef = useRef<HTMLDivElement>(null);
+
+  const frames = useMemo(
+    () => [heroFarLeft, heroLeft, heroImage, heroRight, heroFarRight],
+    [],
+  );
 
   useEffect(() => {
     const timer = setTimeout(() => setEntered(true), 2000);
@@ -43,10 +53,24 @@ const HeroSection = () => {
   const textTranslateY = scrollProgress * -60 - mouse.y * 8;
   const textTranslateX = -mouse.x * 6;
   const blur = scrollProgress * 8;
-  const imgRotateX = -mouse.y * 2.5;
-  const imgRotateY = mouse.x * 2.5;
-  const imgTranslateX = mouse.x * -10;
-  const imgTranslateY = mouse.y * -10;
+
+  // Pick frame index from cursor x: -1 → 0, +1 → 4
+  const activeFrame = (() => {
+    const x = mouse.x;
+    if (x < -0.6) return 0;
+    if (x < -0.2) return 1;
+    if (x < 0.2) return 2;
+    if (x < 0.6) return 3;
+    return 4;
+  })();
+
+  // Foreground (face) follows cursor; background drifts opposite for parallax depth
+  const fgX = mouse.x * 14;
+  const fgY = mouse.y * 10;
+  const fgRotY = mouse.x * 4;
+  const fgRotX = -mouse.y * 3;
+  const bgX = mouse.x * -6;
+  const bgY = mouse.y * -4;
 
   return (
     <div ref={sectionRef} className="relative h-screen w-full overflow-hidden" style={{ perspective: "1200px" }}>
@@ -56,26 +80,59 @@ const HeroSection = () => {
         style={{ animationDelay: "3s" }}
       />
 
+      {/* Background frame stack — cross-fade between angle frames + slight reverse parallax */}
       <div
         className={`absolute inset-0 ${!entered ? "animate-hero-zoom" : ""}`}
         style={{
           transform: entered
-            ? `scale(${heroScale}) translate(${imgTranslateX}px, ${parallaxY + imgTranslateY}px) rotateX(${imgRotateX}deg) rotateY(${imgRotateY}deg)`
+            ? `scale(${heroScale}) translate(${bgX}px, ${parallaxY + bgY}px)`
             : undefined,
           opacity: entered ? heroOpacity : undefined,
           filter: entered ? `blur(${blur}px)` : undefined,
-          transformStyle: "preserve-3d",
           transition: "transform 400ms cubic-bezier(0.16, 1, 0.3, 1)",
           willChange: "transform, opacity, filter",
         }}
       >
-        <img
-          src={heroImage}
-          alt="Abhay Chaudhary — Software Developer"
-          className="w-full h-full object-cover object-[center_20%]"
-        />
+        {frames.map((src, i) => (
+          <img
+            key={src}
+            src={src}
+            alt={i === 2 ? "Abhay Chaudhary — Software Developer" : ""}
+            aria-hidden={i !== 2}
+            className="absolute inset-0 w-full h-full object-cover object-[center_20%]"
+            style={{
+              opacity: activeFrame === i ? 1 : 0,
+              transition: "opacity 160ms ease-out",
+              willChange: "opacity",
+            }}
+            draggable={false}
+          />
+        ))}
         <div className="grain" />
       </div>
+
+      {/* Foreground cutout — moves with cursor for depth-parallax pop-out */}
+      {entered && (
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            transform: `scale(${heroScale * 1.04}) translate3d(${fgX}px, ${parallaxY + fgY}px, 80px) rotateX(${fgRotX}deg) rotateY(${fgRotY}deg)`,
+            transformStyle: "preserve-3d",
+            transition: "transform 250ms cubic-bezier(0.16, 1, 0.3, 1)",
+            opacity: heroOpacity,
+            filter: `blur(${blur * 0.6}px) drop-shadow(0 30px 40px color-mix(in oklab, black 60%, transparent))`,
+            willChange: "transform, opacity",
+          }}
+        >
+          <img
+            src={heroFg}
+            alt=""
+            aria-hidden
+            className="absolute inset-0 w-full h-full object-cover object-[center_20%]"
+            draggable={false}
+          />
+        </div>
+      )}
 
       <div className="absolute inset-0 cinematic-gradient pointer-events-none" />
       <div className="absolute inset-0 hero-overlay pointer-events-none" />
