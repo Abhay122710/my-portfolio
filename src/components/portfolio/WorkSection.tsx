@@ -14,6 +14,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
+import { useTilt } from "@/hooks/use-tilt";
 
 type Project = {
   title: string;
