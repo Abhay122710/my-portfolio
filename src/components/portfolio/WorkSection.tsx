@@ -188,14 +188,15 @@ const Carousel3D = ({
           {projects.map((project) => (
             <div
               key={project.title}
-              className="relative flex-[0_0_70%] sm:flex-[0_0_55%] md:flex-[0_0_42%] min-w-0 px-4"
+              className="relative flex-[0_0_60%] sm:flex-[0_0_45%] md:flex-[0_0_36%] lg:flex-[0_0_32%] min-w-0 px-2"
               style={{ transformStyle: "preserve-3d" }}
             >
               <div
                 className="carousel3d-slide will-change-transform"
                 style={{
                   transformStyle: "preserve-3d",
-                  transition: "opacity 200ms ease-out",
+                  transformOrigin: "center center",
+                  transition: "opacity 250ms ease-out, filter 250ms ease-out",
                 }}
               >
                 <ProjectCard project={project} onClick={() => onProjectClick(project)} />
