@@ -54,15 +54,12 @@ const HeroSection = () => {
   const textTranslateX = -mouse.x * 6;
   const blur = scrollProgress * 8;
 
-  // Pick frame index from cursor x: -1 → 0, +1 → 4
-  const activeFrame = (() => {
-    const x = mouse.x;
-    if (x < -0.6) return 0;
-    if (x < -0.2) return 1;
-    if (x < 0.2) return 2;
-    if (x < 0.6) return 3;
-    return 4;
-  })();
+  // Continuous tent-function weights so adjacent frames blend smoothly
+  // Frame anchors at x = [-1, -0.5, 0, 0.5, 1]; step = 0.5
+  const framePositions = [-1, -0.5, 0, 0.5, 1];
+  const frameWeights = framePositions.map((pos) =>
+    Math.max(0, 1 - Math.abs(mouse.x - pos) / 0.5),
+  );
 
   // Foreground (face) follows cursor; background drifts opposite for parallax depth
   const fgX = mouse.x * 14;
@@ -101,8 +98,8 @@ const HeroSection = () => {
             aria-hidden={i !== 2}
             className="absolute inset-0 w-full h-full object-cover object-[center_20%]"
             style={{
-              opacity: activeFrame === i ? 1 : 0,
-              transition: "opacity 160ms ease-out",
+              opacity: frameWeights[i],
+              transition: "opacity 220ms ease-out",
               willChange: "opacity",
             }}
             draggable={false}
