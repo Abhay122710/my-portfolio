@@ -146,15 +146,18 @@ const Carousel3D = ({
       const node = tweenNodes.current[snapIndex];
       if (!node) return;
       if (!isScrollEvent && !slidesInView.includes(snapIndex)) return;
-      const clamped = Math.max(-1.2, Math.min(1.2, diff));
-      const rotateY = clamped * -45;
-      const translateZ = -Math.abs(clamped) * 220;
-      const translateX = clamped * 40;
-      const scale = 1 - Math.min(Math.abs(clamped) * 0.18, 0.32);
-      const opacity = 1 - Math.min(Math.abs(clamped) * 0.55, 0.7);
+      const clamped = Math.max(-2, Math.min(2, diff));
+      const abs = Math.abs(clamped);
+      const rotateY = clamped * -55;
+      const translateZ = -abs * 320;
+      const translateX = clamped * -90;
+      const scale = 1 - Math.min(abs * 0.22, 0.5);
+      const opacity = 1 - Math.min(abs * 0.45, 0.75);
+      const blur = Math.min(abs * 6, 10);
       node.style.transform = `translateX(${translateX}px) translateZ(${translateZ}px) rotateY(${rotateY}deg) scale(${scale})`;
       node.style.opacity = `${opacity}`;
-      node.style.zIndex = `${100 - Math.round(Math.abs(clamped) * 100)}`;
+      node.style.filter = `blur(${blur}px)`;
+      node.style.zIndex = `${100 - Math.round(abs * 100)}`;
     });
   }, []);
 
