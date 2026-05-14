@@ -70,6 +70,46 @@ const projects: Project[] = [
   },
 ];
 
+const ProjectCard = ({ project, onClick }: { project: Project; onClick: () => void }) => {
+  const tilt = useTilt<HTMLButtonElement>({ max: 5, scale: 1.02 });
+  return (
+    <button
+      ref={tilt.ref}
+      onMouseMove={tilt.onMouseMove}
+      onMouseLeave={tilt.onMouseLeave}
+      type="button"
+      onClick={onClick}
+      className="group relative w-full text-left rounded-xl border border-border glass tilt-card gradient-border p-8 hover:border-primary/40 block cursor-pointer h-full"
+    >
+      <div className="flex items-start justify-between mb-4 tilt-child">
+        <div>
+          <h3 className="text-xl font-semibold text-foreground mb-1">{project.title}</h3>
+          <p className="text-xs text-muted-foreground tracking-wider uppercase">{project.date}</p>
+        </div>
+        <ExternalLink
+          size={16}
+          className="text-muted-foreground group-hover:text-primary transition-all duration-300 group-hover:-translate-y-0.5 group-hover:rotate-12"
+        />
+      </div>
+      <p className="text-sm text-muted-foreground leading-relaxed mb-5">{project.description}</p>
+      <div className="flex flex-wrap gap-2">
+        {project.tech.map((t) => (
+          <span
+            key={t}
+            className="text-xs px-3 py-1 rounded-full bg-primary/10 text-primary font-medium"
+            style={{
+              boxShadow:
+                "inset 0 1px 0 0 color-mix(in oklab, white 8%, transparent), inset 0 -1px 2px 0 color-mix(in oklab, black 30%, transparent)",
+            }}
+          >
+            {t}
+          </span>
+        ))}
+      </div>
+    </button>
+  );
+};
+
 const WorkSection = () => {
   const [showMyWork, setShowMyWork] = useState(false);
   const [showFigma, setShowFigma] = useState(false);
