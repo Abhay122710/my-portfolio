@@ -105,7 +105,56 @@
   --hero-orange: oklch(0.72 0.18 50);
   --hero-bg: oklch(0.16 0.03 260);
 
+  /* Material / depth tokens */
+  --shadow-elevated:
+    0 1px 0 0 color-mix(in oklab, white 8%, transparent) inset,
+    0 12px 30px -12px color-mix(in oklab, black 70%, transparent),
+    0 30px 60px -30px color-mix(in oklab, var(--hero-blue) 30%, transparent);
+  --shadow-inset:
+    inset 0 1px 0 0 color-mix(in oklab, white 6%, transparent),
+    inset 0 -1px 0 0 color-mix(in oklab, black 40%, transparent);
+  --shadow-glow-blue: 0 0 40px -8px color-mix(in oklab, var(--hero-blue) 50%, transparent);
+  --shadow-glow-orange: 0 0 40px -8px color-mix(in oklab, var(--hero-orange) 50%, transparent);
+  --gradient-card: linear-gradient(
+    160deg,
+    color-mix(in oklab, white 5%, transparent) 0%,
+    color-mix(in oklab, var(--hero-bg) 70%, transparent) 60%,
+    color-mix(in oklab, var(--hero-blue) 8%, transparent) 100%
+  );
+  --gradient-border: linear-gradient(
+    135deg,
+    color-mix(in oklab, var(--hero-blue) 60%, transparent),
+    color-mix(in oklab, white 12%, transparent) 50%,
+    color-mix(in oklab, var(--hero-orange) 50%, transparent)
+  );
+  --gradient-timeline: linear-gradient(
+    to bottom,
+    transparent 0%,
+    color-mix(in oklab, var(--hero-blue) 70%, transparent) 15%,
+    color-mix(in oklab, var(--hero-orange) 60%, transparent) 85%,
+    transparent 100%
+  );
+
   color-scheme: dark;
+}
+
+@theme inline {
+  @keyframes tilt-float {
+    0%, 100% { transform: translateY(0) rotateX(0) rotateY(0); }
+    50% { transform: translateY(-6px) rotateX(2deg) rotateY(-2deg); }
+  }
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+  @keyframes pulse-glow {
+    0%, 100% { opacity: 0.5; transform: scale(1); }
+    50% { opacity: 0.8; transform: scale(1.05); }
+  }
+  @keyframes light-drift {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(40px, -30px); }
+  }
 }
 
 @layer base {
@@ -164,6 +213,124 @@
     margin-inline: auto;
     max-width: 1400px;
     padding-inline: 1.5rem;
+  }
+  .grain {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.06;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  }
+  .vignette {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(ellipse at center, transparent 50%, color-mix(in oklab, var(--hero-bg) 60%, transparent) 100%);
+  }
+  .glass {
+    background: var(--gradient-card);
+    backdrop-filter: blur(8px);
+    border: 1px solid color-mix(in oklab, white 8%, transparent);
+    box-shadow: var(--shadow-elevated);
+  }
+  .tilt-card {
+    transform-style: preserve-3d;
+    transition: transform 400ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 400ms ease, border-color 400ms ease;
+    will-change: transform;
+  }
+  .tilt-child {
+    transform: translateZ(30px);
+  }
+  .gradient-border {
+    position: relative;
+  }
+  .gradient-border::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: var(--gradient-border);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+            mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 400ms ease;
+    pointer-events: none;
+  }
+  .gradient-border:hover::before {
+    opacity: 1;
+  }
+  .orb-3d {
+    background:
+      radial-gradient(circle at 30% 30%, color-mix(in oklab, white 40%, transparent), transparent 55%),
+      radial-gradient(circle at 70% 75%, color-mix(in oklab, var(--hero-blue) 60%, transparent), transparent 70%),
+      var(--color-card);
+    box-shadow:
+      inset 0 1px 0 0 color-mix(in oklab, white 25%, transparent),
+      inset 0 -2px 4px 0 color-mix(in oklab, black 50%, transparent),
+      0 6px 20px -6px color-mix(in oklab, var(--hero-blue) 50%, transparent);
+  }
+  .orb-3d-accent {
+    background:
+      radial-gradient(circle at 30% 30%, color-mix(in oklab, white 40%, transparent), transparent 55%),
+      radial-gradient(circle at 70% 75%, color-mix(in oklab, var(--hero-orange) 60%, transparent), transparent 70%),
+      var(--color-card);
+    box-shadow:
+      inset 0 1px 0 0 color-mix(in oklab, white 25%, transparent),
+      inset 0 -2px 4px 0 color-mix(in oklab, black 50%, transparent),
+      0 6px 20px -6px color-mix(in oklab, var(--hero-orange) 50%, transparent);
+  }
+  .btn-3d {
+    box-shadow:
+      inset 0 1px 0 0 color-mix(in oklab, white 12%, transparent),
+      inset 0 -2px 0 0 color-mix(in oklab, black 35%, transparent),
+      0 6px 16px -6px color-mix(in oklab, black 60%, transparent);
+    transition: transform 200ms ease, box-shadow 200ms ease, border-color 300ms ease, color 300ms ease;
+  }
+  .btn-3d:hover {
+    transform: translateY(-2px);
+    box-shadow:
+      inset 0 1px 0 0 color-mix(in oklab, white 18%, transparent),
+      inset 0 -2px 0 0 color-mix(in oklab, black 35%, transparent),
+      0 12px 24px -8px color-mix(in oklab, var(--hero-blue) 40%, transparent);
+  }
+  .btn-3d:active {
+    transform: translateY(1px);
+    box-shadow:
+      inset 0 2px 4px 0 color-mix(in oklab, black 50%, transparent),
+      0 2px 6px -2px color-mix(in oklab, black 60%, transparent);
+  }
+  .timeline-line {
+    background: var(--gradient-timeline);
+  }
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px) rotateX(-6deg);
+    transform-origin: center bottom;
+    transition: opacity 800ms ease, transform 800ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .reveal-in {
+    opacity: 1;
+    transform: translateY(0) rotateX(0);
+  }
+  .animate-light-drift {
+    animation: light-drift 14s ease-in-out infinite;
+  }
+  .animate-tilt-float {
+    animation: tilt-float 7s ease-in-out infinite;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-light-drift,
+  .animate-tilt-float,
+  .animate-float {
+    animation: none !important;
+  }
+  .tilt-card {
+    transform: none !important;
   }
 }
 

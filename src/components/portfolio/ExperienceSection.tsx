@@ -38,15 +38,23 @@ const ExperienceSection = () => {
           <h2 className="text-4xl md:text-5xl font-bold text-foreground">Experience</h2>
         </div>
         <div className="max-w-2xl mx-auto relative">
-          <div className="absolute left-6 top-0 bottom-0 w-px bg-border" />
+          <div className="absolute left-6 top-0 bottom-0 w-[2px] timeline-line rounded-full" />
           <div className="space-y-10">
             {experiences.map((exp) => (
-              <div key={exp.title} className="relative pl-16">
-                <div className="absolute left-0 top-1 w-12 h-12 rounded-full bg-card border border-border flex items-center justify-center">
+              <div
+                key={exp.title}
+                className="relative pl-16 glass rounded-xl p-5 transition-transform duration-500 hover:-translate-y-1"
+              >
+                <div
+                  className={`absolute -left-0 top-4 w-12 h-12 rounded-full flex items-center justify-center ${
+                    exp.type === "work" ? "orb-3d" : "orb-3d-accent"
+                  }`}
+                  style={{ left: "-1.5rem" }}
+                >
                   {exp.type === "work" ? (
-                    <Briefcase size={18} className="text-primary" />
+                    <Briefcase size={18} className="text-foreground drop-shadow" />
                   ) : (
-                    <GraduationCap size={18} className="text-accent" />
+                    <GraduationCap size={18} className="text-foreground drop-shadow" />
                   )}
                 </div>
                 <h3 className="text-lg font-semibold text-foreground">{exp.title}</h3>

@@ -25,9 +25,13 @@ const AboutSection = () => {
             foundations in Data Structures, Algorithms, and Object-Oriented Programming, I bring
             ideas to life through clean code and creative design.
           </p>
-          <div className="pt-8 grid grid-cols-2 sm:grid-cols-4 gap-6">
-            {stats.map((item) => (
-              <div key={item.label} className="text-center">
+          <div className="pt-8 grid grid-cols-2 sm:grid-cols-4 gap-4" style={{ perspective: "900px" }}>
+            {stats.map((item, i) => (
+              <div
+                key={item.label}
+                className="glass rounded-xl p-5 text-center animate-tilt-float"
+                style={{ animationDelay: `${i * 0.7}s` }}
+              >
                 <p className="text-sm font-semibold text-foreground">{item.value}</p>
                 <p className="text-xs tracking-widest uppercase text-muted-foreground mt-1">
                   {item.label}

@@ -16,14 +16,14 @@ const ContactSection = () => {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6">
             <a
               href="mailto:Abhay.122710@stu.upes.ac.in"
-              className="inline-flex items-center gap-3 px-6 py-3 rounded-full border border-border bg-card/50 text-foreground text-sm transition-all duration-300 hover:border-primary hover:text-primary"
+              className="btn-3d inline-flex items-center gap-3 px-6 py-3 rounded-full border border-border bg-card/50 text-foreground text-sm hover:border-primary hover:text-primary"
             >
               <Mail size={16} />
               Abhay.122710@stu.upes.ac.in
             </a>
             <a
               href="tel:+918476003000"
-              className="inline-flex items-center gap-3 px-6 py-3 rounded-full border border-border bg-card/50 text-foreground text-sm transition-all duration-300 hover:border-primary hover:text-primary"
+              className="btn-3d inline-flex items-center gap-3 px-6 py-3 rounded-full border border-border bg-card/50 text-foreground text-sm hover:border-primary hover:text-primary"
             >
               <Phone size={16} />
               +91 8476003000
