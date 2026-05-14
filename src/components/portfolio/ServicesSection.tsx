@@ -1,4 +1,5 @@
 import { Gamepad2, Palette } from "lucide-react";
+import { useTilt } from "@/hooks/use-tilt";
 
 const services = [
   {
@@ -15,6 +16,26 @@ const services = [
   },
 ];
 
+const ServiceCard = ({ service }: { service: (typeof services)[number] }) => {
+  const tilt = useTilt<HTMLDivElement>({ max: 6, scale: 1.03 });
+  return (
+    <div
+      ref={tilt.ref}
+      onMouseMove={tilt.onMouseMove}
+      onMouseLeave={tilt.onMouseLeave}
+      className="group relative rounded-xl border border-border glass tilt-card gradient-border p-8 hover:border-primary/40"
+    >
+      <div className="mb-5 inline-flex items-center justify-center w-12 h-12 rounded-lg bg-primary/10 text-primary tilt-child transition-colors duration-300 group-hover:bg-primary/20"
+        style={{ boxShadow: "var(--shadow-glow-blue)" }}
+      >
+        <service.icon size={24} />
+      </div>
+      <h3 className="text-lg font-semibold text-foreground mb-2 tilt-child">{service.title}</h3>
+      <p className="text-sm text-muted-foreground leading-relaxed">{service.description}</p>
+    </div>
+  );
+};
+
 const ServicesSection = () => {
   return (
     <section id="services" className="py-24 md:py-32 relative scroll-mt-20">
@@ -23,18 +44,9 @@ const ServicesSection = () => {
           <p className="text-xs tracking-[0.4em] uppercase text-primary mb-3">What I Do</p>
           <h2 className="text-4xl md:text-5xl font-bold text-foreground">Services</h2>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-3xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-3xl mx-auto" style={{ perspective: "1000px" }}>
           {services.map((service) => (
-            <div
-              key={service.title}
-              className="group relative rounded-xl border border-border bg-card/50 p-8 transition-all duration-500 hover:border-primary/40 hover:bg-card"
-            >
-              <div className="mb-5 inline-flex items-center justify-center w-12 h-12 rounded-lg bg-primary/10 text-primary transition-colors duration-300 group-hover:bg-primary/20">
-                <service.icon size={24} />
-              </div>
-              <h3 className="text-lg font-semibold text-foreground mb-2">{service.title}</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">{service.description}</p>
-            </div>
+            <ServiceCard key={service.title} service={service} />
           ))}
         </div>
       </div>
