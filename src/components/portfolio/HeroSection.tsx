@@ -98,8 +98,8 @@ const HeroSection = () => {
             aria-hidden={i !== 2}
             className="absolute inset-0 w-full h-full object-cover object-[center_20%]"
             style={{
-              opacity: activeFrame === i ? 1 : 0,
-              transition: "opacity 160ms ease-out",
+              opacity: frameWeights[i],
+              transition: "opacity 220ms ease-out",
               willChange: "opacity",
             }}
             draggable={false}
