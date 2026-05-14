@@ -134,21 +134,7 @@ const WorkSection = () => {
           </button>
         </div>
 
-        <Carousel
-          opts={{ align: "start", loop: true }}
-          plugins={[Autoplay({ delay: 4000, stopOnInteraction: true })]}
-          className="max-w-4xl mx-auto"
-        >
-          <CarouselContent style={{ perspective: "1100px" }}>
-            {projects.map((project) => (
-              <CarouselItem key={project.title} className="md:basis-1/2">
-                <ProjectCard project={project} onClick={() => handleProjectClick(project)} />
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          <CarouselPrevious className="hidden md:flex" />
-          <CarouselNext className="hidden md:flex" />
-        </Carousel>
+        <Carousel3D projects={projects} onProjectClick={handleProjectClick} />
       </div>
 
       <Dialog
