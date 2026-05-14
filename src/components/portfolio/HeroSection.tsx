@@ -6,6 +6,7 @@ const HeroSection = () => {
   const [parallaxY, setParallaxY] = useState(0);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [entered, setEntered] = useState(false);
+  const [mouse, setMouse] = useState({ x: 0, y: 0 });
   const sectionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -24,26 +25,47 @@ const HeroSection = () => {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  useEffect(() => {
+    if (window.matchMedia("(hover: none)").matches) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const onMove = (e: MouseEvent) => {
+      const x = (e.clientX / window.innerWidth - 0.5) * 2;
+      const y = (e.clientY / window.innerHeight - 0.5) * 2;
+      setMouse({ x, y });
+    };
+    window.addEventListener("mousemove", onMove, { passive: true });
+    return () => window.removeEventListener("mousemove", onMove);
+  }, []);
+
   const heroOpacity = Math.max(0, 1 - scrollProgress * 1.5);
   const heroScale = 1.1 + scrollProgress * 0.15;
   const textOpacity = Math.max(0, 1 - scrollProgress * 2.5);
-  const textTranslateY = scrollProgress * -60;
+  const textTranslateY = scrollProgress * -60 - mouse.y * 8;
+  const textTranslateX = -mouse.x * 6;
   const blur = scrollProgress * 8;
+  const imgRotateX = -mouse.y * 2.5;
+  const imgRotateY = mouse.x * 2.5;
+  const imgTranslateX = mouse.x * -10;
+  const imgTranslateY = mouse.y * -10;
 
   return (
-    <div ref={sectionRef} className="relative h-screen w-full overflow-hidden">
-      <div className="absolute -left-1/4 top-1/4 w-[600px] h-[600px] glow-spot-blue rounded-full animate-float opacity-60 pointer-events-none" />
+    <div ref={sectionRef} className="relative h-screen w-full overflow-hidden" style={{ perspective: "1200px" }}>
+      <div className="absolute -left-1/4 top-1/4 w-[600px] h-[600px] glow-spot-blue rounded-full animate-float opacity-60 pointer-events-none animate-light-drift" />
       <div
-        className="absolute -right-1/4 top-1/3 w-[500px] h-[500px] glow-spot-orange rounded-full animate-float opacity-50 pointer-events-none"
+        className="absolute -right-1/4 top-1/3 w-[500px] h-[500px] glow-spot-orange rounded-full animate-float opacity-50 pointer-events-none animate-light-drift"
         style={{ animationDelay: "3s" }}
       />
 
       <div
         className={`absolute inset-0 ${!entered ? "animate-hero-zoom" : ""}`}
         style={{
-          transform: entered ? `scale(${heroScale}) translateY(${parallaxY}px)` : undefined,
+          transform: entered
+            ? `scale(${heroScale}) translate(${imgTranslateX}px, ${parallaxY + imgTranslateY}px) rotateX(${imgRotateX}deg) rotateY(${imgRotateY}deg)`
+            : undefined,
           opacity: entered ? heroOpacity : undefined,
           filter: entered ? `blur(${blur}px)` : undefined,
+          transformStyle: "preserve-3d",
+          transition: "transform 400ms cubic-bezier(0.16, 1, 0.3, 1)",
           willChange: "transform, opacity, filter",
         }}
       >
@@ -52,16 +74,22 @@ const HeroSection = () => {
           alt="Abhay Chaudhary — Software Developer"
           className="w-full h-full object-cover object-[center_20%]"
         />
+        <div className="grain" />
       </div>
 
       <div className="absolute inset-0 cinematic-gradient pointer-events-none" />
       <div className="absolute inset-0 hero-overlay pointer-events-none" />
+      <div className="vignette" />
 
       <div
         className="absolute inset-0 flex flex-col items-center justify-center z-10 px-4"
         style={
           entered
-            ? { opacity: textOpacity, transform: `translateY(${textTranslateY}px)` }
+            ? {
+                opacity: textOpacity,
+                transform: `translate3d(${textTranslateX}px, ${textTranslateY}px, 60px)`,
+                transformStyle: "preserve-3d",
+              }
             : undefined
         }
       >
@@ -69,7 +97,14 @@ const HeroSection = () => {
           className={`text-5xl sm:text-7xl md:text-9xl font-black tracking-tight text-foreground text-glow text-center ${
             !entered ? "opacity-0 animate-fade-up" : ""
           }`}
-          style={!entered ? { animationDelay: "0.5s" } : undefined}
+          style={
+            !entered
+              ? { animationDelay: "0.5s" }
+              : {
+                  textShadow:
+                    "0 1px 0 color-mix(in oklab, white 12%, transparent), 0 2px 0 color-mix(in oklab, black 50%, transparent), 0 8px 24px color-mix(in oklab, var(--hero-blue) 50%, transparent), 0 0 80px color-mix(in oklab, var(--hero-blue) 25%, transparent)",
+                }
+          }
         >
           Abhay Chaudhary
         </h1>
