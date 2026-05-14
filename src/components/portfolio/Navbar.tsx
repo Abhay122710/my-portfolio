@@ -92,6 +92,14 @@ const Navbar = () => {
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         scrolled ? "nav-blur border-b border-border" : "bg-transparent"
       }`}
+      style={
+        scrolled
+          ? {
+              boxShadow:
+                "inset 0 1px 0 0 color-mix(in oklab, white 8%, transparent), 0 8px 24px -12px color-mix(in oklab, black 60%, transparent)",
+            }
+          : undefined
+      }
     >
       <div className="container-x flex items-center justify-between h-16 md:h-20">
         <a
