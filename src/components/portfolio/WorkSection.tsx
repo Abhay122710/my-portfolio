@@ -1,19 +1,14 @@
-import { useState } from "react";
-import { ExternalLink, Palette, PenTool } from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { ExternalLink, Palette, PenTool, ArrowLeft, ArrowRight } from "lucide-react";
+import useEmblaCarousel from "embla-carousel-react";
+import Autoplay from "embla-carousel-autoplay";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
-import Autoplay from "embla-carousel-autoplay";
+import { Button } from "@/components/ui/button";
 import { useTilt } from "@/hooks/use-tilt";
 
 type Project = {
@@ -110,6 +105,138 @@ const ProjectCard = ({ project, onClick }: { project: Project; onClick: () => vo
   );
 };
 
+const Carousel3D = ({
+  projects,
+  onProjectClick,
+}: {
+  projects: Project[];
+  onProjectClick: (p: Project) => void;
+}) => {
+  const [emblaRef, emblaApi] = useEmblaCarousel(
+    { loop: true, align: "center", containScroll: false },
+    [Autoplay({ delay: 4500, stopOnInteraction: true })],
+  );
+  const tweenNodes = useRef<HTMLElement[]>([]);
+  const [selected, setSelected] = useState(0);
+
+  const setTweenNodes = useCallback((api: NonNullable<typeof emblaApi>) => {
+    tweenNodes.current = api.slideNodes().map(
+      (slide) => slide.querySelector(".carousel3d-slide") as HTMLElement,
+    );
+  }, []);
+
+  const tween = useCallback((api: NonNullable<typeof emblaApi>) => {
+    const engine = api.internalEngine();
+    const scrollProgress = api.scrollProgress();
+    const slidesInView = api.slidesInView();
+    const isScrollEvent = engine.scrollBody.direction() !== 0;
+
+    api.scrollSnapList().forEach((scrollSnap, snapIndex) => {
+      let diff = scrollSnap - scrollProgress;
+      if (engine.options.loop) {
+        engine.slideLooper.loopPoints.forEach((loopItem) => {
+          const target = loopItem.target();
+          if (snapIndex === loopItem.index && target !== 0) {
+            const sign = Math.sign(target);
+            if (sign === -1) diff = scrollSnap - (1 + scrollProgress);
+            if (sign === 1) diff = scrollSnap + (1 - scrollProgress);
+          }
+        });
+      }
+      const node = tweenNodes.current[snapIndex];
+      if (!node) return;
+      if (!isScrollEvent && !slidesInView.includes(snapIndex)) return;
+      const clamped = Math.max(-1.2, Math.min(1.2, diff));
+      const rotateY = clamped * -45;
+      const translateZ = -Math.abs(clamped) * 220;
+      const translateX = clamped * 40;
+      const scale = 1 - Math.min(Math.abs(clamped) * 0.18, 0.32);
+      const opacity = 1 - Math.min(Math.abs(clamped) * 0.55, 0.7);
+      node.style.transform = `translateX(${translateX}px) translateZ(${translateZ}px) rotateY(${rotateY}deg) scale(${scale})`;
+      node.style.opacity = `${opacity}`;
+      node.style.zIndex = `${100 - Math.round(Math.abs(clamped) * 100)}`;
+    });
+  }, []);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+    setTweenNodes(emblaApi);
+    tween(emblaApi);
+    const onSelect = () => setSelected(emblaApi.selectedScrollSnap());
+    onSelect();
+    emblaApi
+      .on("reInit", (api) => {
+        setTweenNodes(api);
+        tween(api);
+      })
+      .on("scroll", tween)
+      .on("slideFocus", tween)
+      .on("select", onSelect);
+  }, [emblaApi, setTweenNodes, tween]);
+
+  return (
+    <div className="relative max-w-5xl mx-auto">
+      <div
+        className="overflow-hidden py-8"
+        ref={emblaRef}
+        style={{ perspective: "1400px", perspectiveOrigin: "50% 50%" }}
+      >
+        <div className="flex" style={{ transformStyle: "preserve-3d" }}>
+          {projects.map((project) => (
+            <div
+              key={project.title}
+              className="relative flex-[0_0_70%] sm:flex-[0_0_55%] md:flex-[0_0_42%] min-w-0 px-4"
+              style={{ transformStyle: "preserve-3d" }}
+            >
+              <div
+                className="carousel3d-slide will-change-transform"
+                style={{
+                  transformStyle: "preserve-3d",
+                  transition: "opacity 200ms ease-out",
+                }}
+              >
+                <ProjectCard project={project} onClick={() => onProjectClick(project)} />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <Button
+        variant="outline"
+        size="icon"
+        onClick={() => emblaApi?.scrollPrev()}
+        className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 h-10 w-10 rounded-full z-50"
+        aria-label="Previous"
+      >
+        <ArrowLeft className="h-4 w-4" />
+      </Button>
+      <Button
+        variant="outline"
+        size="icon"
+        onClick={() => emblaApi?.scrollNext()}
+        className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 h-10 w-10 rounded-full z-50"
+        aria-label="Next"
+      >
+        <ArrowRight className="h-4 w-4" />
+      </Button>
+
+      <div className="flex justify-center gap-2 mt-6">
+        {projects.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => emblaApi?.scrollTo(i)}
+            aria-label={`Go to slide ${i + 1}`}
+            className={`h-1.5 rounded-full transition-all duration-300 ${
+              selected === i ? "w-8 bg-primary" : "w-2 bg-muted-foreground/30 hover:bg-muted-foreground/60"
+            }`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+};
+
 const WorkSection = () => {
   const [showMyWork, setShowMyWork] = useState(false);
   const [showFigma, setShowFigma] = useState(false);
@@ -139,21 +266,7 @@ const WorkSection = () => {
           </button>
         </div>
 
-        <Carousel
-          opts={{ align: "start", loop: true }}
-          plugins={[Autoplay({ delay: 4000, stopOnInteraction: true })]}
-          className="max-w-4xl mx-auto"
-        >
-          <CarouselContent style={{ perspective: "1100px" }}>
-            {projects.map((project) => (
-              <CarouselItem key={project.title} className="md:basis-1/2">
-                <ProjectCard project={project} onClick={() => handleProjectClick(project)} />
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          <CarouselPrevious className="hidden md:flex" />
-          <CarouselNext className="hidden md:flex" />
-        </Carousel>
+        <Carousel3D projects={projects} onProjectClick={handleProjectClick} />
       </div>
 
       <Dialog
